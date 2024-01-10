@@ -16,9 +16,9 @@ public class EnemyMovement : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        if (toEnd){
+        if (toEnd) {
             transform.LookAt(endPoint);
             rb.MovePosition(rb.position + endPoint.position * Time.fixedDeltaTime);
             if (transform.position.x <= endPoint.position.x + 1 && transform.position.z <= endPoint.position.z + 1) {
