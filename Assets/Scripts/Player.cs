@@ -1,44 +1,74 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IDamagable
 {
-    [SerializeField] TMP_Text scoreText;
-    private int score = 0;
-    [SerializeField] FloatVariable health;
-    [SerializeField] PhysicsCharacterController characterController;
-    [Header("Events")]
-    [SerializeField] IntEvent scoreEvent = default;
-    [SerializeField] VoidEvent gameStartEvent = default;
+	[SerializeField] TMP_Text scoreText;
+	[SerializeField] FloatVariable health;
+	[SerializeField] PhysicsCharacterController characterController;
 
-    private void Start()
-    {
-        health.value = 50;
-    }
+	[Header("Events")]
+	[SerializeField] IntEvent scoreEvent = default;
+	[SerializeField] Event gameStartEvent = default;
+	[SerializeField] Event playerDeadEvent = default;
 
-    public int Score {
-        get { return score; }
-        set {
-            score = value;
-            scoreText.text = "Score: " + score.ToString();
-            scoreEvent.RaiseEvent(score);
-        }
-    }
+	private int score = 0;
 
-    private void OnEnable()
-    {
-        gameStartEvent.Subscribe(OnStartGame);
-    }
+	public int Score 
+	{ 
+		get { return score; } 
+		set { 
+			score = value; 
+			scoreText.text = score.ToString();
+			scoreEvent.RaiseEvent(score);
+		} 
+	}
 
-    public void AddPoints(int points)
-    {
-        Score += points;
-    }
+	private void OnEnable()
+	{
+		gameStartEvent.Subscribe(OnStartGame);
+	}
 
-    private void OnStartGame()
-    {
-        characterController.enabled = true;
-    }
+	private void Start()
+	{
+	}
+
+	public void AddPoints(int points)
+	{
+		Score += points;
+	}
+
+	private void OnStartGame()
+	{
+		characterController.enabled = true;
+	}
+
+	public void Damage(float damage)
+	{
+		health.value -= damage;
+		if (health <= 0)
+		{
+			playerDeadEvent.RaiseEvent();
+		}
+	}
+
+	public void TakeDamage(float damage)
+	{
+		health.value -= damage;
+		if (health <= 0)
+		{
+			playerDeadEvent.RaiseEvent();
+		}
+	}
+
+	public void OnRespawn(GameObject respawn)
+	{
+		transform.position = respawn.transform.position;
+		transform.rotation = respawn.transform.rotation;
+
+		characterController.Reset();
+	}
 }
