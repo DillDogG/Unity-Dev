@@ -7,6 +7,8 @@ using TMPro;
 public class GameManager : Singleton<GameManager>
 {
 	[SerializeField] GameObject titleUI;
+	[SerializeField] GameObject gameOverUI;
+	[SerializeField] TMP_Text endTextUI;
 	[SerializeField] TMP_Text livesUI;
 	[SerializeField] TMP_Text timerUI;
 	[SerializeField] Slider healthUI;
@@ -16,6 +18,7 @@ public class GameManager : Singleton<GameManager>
 
 	[Header("Events")]
 	[SerializeField] Event gameStartEvent;
+	[SerializeField] Event titleStartEvent;
 	[SerializeField] GameObjectEvent respawnEvent;
 
 	public enum State
@@ -23,12 +26,14 @@ public class GameManager : Singleton<GameManager>
 		TITLE,
 		START_GAME,
 		PLAY_GAME,
-		GAME_OVER
+		GAME_OVER,
+		GAME_LOST
 	}
 
 	private State state = State.TITLE;
 	private float timer = 0;
 	private int lives = 0;
+	private int gameCount = 0;
 
 	public int Lives { 
 		get { return lives; } 
@@ -48,20 +53,21 @@ public class GameManager : Singleton<GameManager>
 		}
 	}
 
-	void Update()
+    void Update()
 	{
 		switch (state)
 		{
 			case State.TITLE:
+                gameOverUI.SetActive(false);
 				titleUI.SetActive(true);
-				Cursor.lockState = CursorLockMode.None;
+                Cursor.lockState = CursorLockMode.None;
 				Cursor.visible = true;
-				break;
+                Timer = 60;
+                Lives = 3;
+                break;
 			case State.START_GAME:
 				titleUI.SetActive(false);
-				Timer = 60;
-				Lives = 3;
-				health.value = 100;
+                health.value = 100;
 				Cursor.lockState = CursorLockMode.Locked;
 				Cursor.visible = false;
 				gameStartEvent.RaiseEvent();
@@ -76,7 +82,17 @@ public class GameManager : Singleton<GameManager>
 				}
 				break;
 			case State.GAME_OVER:
-				break;
+				gameOverUI.SetActive(true);
+				endTextUI.text = "Game Over. Game count: " + (gameCount + 1).ToString();
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+                break;
+			case State.GAME_LOST:
+                gameOverUI.SetActive(true);
+				endTextUI.text = "You lost. Game count: " + (gameCount + 1).ToString();
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+                break;
 			default:
 				break;
 		}
@@ -89,9 +105,17 @@ public class GameManager : Singleton<GameManager>
 		state = State.START_GAME;
 	}
 
+	public void OnGameEnd()
+	{
+		gameCount++;
+		state = State.TITLE;
+	}
+
 	public void OnPlayerDead()
 	{
-		state = State.START_GAME;
+		Lives--;
+		if (Lives > 0) state = State.START_GAME;
+		else state = State.GAME_LOST;
 	}
 
 	public void OnAddPoints(int points)
