@@ -55,7 +55,7 @@ public class Player : MonoBehaviour, IDamagable
 		}
 	}
 
-	public void TakeDamage(float damage)
+	public void ApplyDamage(float damage)
 	{
 		health.value -= damage;
 		if (health <= 0)
