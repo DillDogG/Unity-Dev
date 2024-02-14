@@ -3,23 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
-public class GameManager : Singleton<GameManager>
+public class GameManagerSpace : Singleton<GameManager>
 {
 	[SerializeField] GameObject titleUI;
 	[SerializeField] GameObject gameOverUI;
 	[SerializeField] TMP_Text endTextUI;
 	[SerializeField] TMP_Text livesUI;
-	[SerializeField] TMP_Text timerUI;
+	//[SerializeField] TMP_Text timerUI;
 	[SerializeField] Slider healthUI;
 
 	[SerializeField] FloatVariable health;
-	[SerializeField] GameObject respawn;
+	[SerializeField] FloatVariable speed;
+	//[SerializeField] GameObject respawn;
 
 	[Header("Events")]
 	[SerializeField] Event gameStartEvent;
 	[SerializeField] Event titleStartEvent;
-	[SerializeField] GameObjectEvent respawnEvent;
+	//[SerializeField] GameObjectEvent respawnEvent;
 
 	public enum State
 	{
@@ -33,25 +35,16 @@ public class GameManager : Singleton<GameManager>
 	private State state = State.TITLE;
 	private float timer = 0;
 	private int lives = 0;
-	private int gameCount = 0;
 
 	public int Lives { 
 		get { return lives; } 
 		set { 
-			lives = value;
+			lives = value; 
 			livesUI.text = "LIVES: " + lives.ToString(); 
 			} 
 		}
 
-	public float Timer
-	{
-		get { return timer; }
-		set
-		{
-			timer = value;
-			timerUI.text = string.Format("{0:F1}", timer);
-		}
-	}
+	public float Timer { get; private set; }
 
     void Update()
 	{
@@ -63,15 +56,17 @@ public class GameManager : Singleton<GameManager>
                 Cursor.lockState = CursorLockMode.None;
 				Cursor.visible = true;
                 Timer = 60;
+				speed.value = 0;
                 Lives = 3;
                 break;
 			case State.START_GAME:
 				titleUI.SetActive(false);
                 health.value = 100;
-				Cursor.lockState = CursorLockMode.Locked;
-				Cursor.visible = false;
+                speed.value = 5;
+				//Cursor.lockState = CursorLockMode.Locked;
+				//Cursor.visible = false;
 				gameStartEvent.RaiseEvent();
-				respawnEvent.RaiseEvent(respawn);
+				//respawnEvent.RaiseEvent(respawn);
 				state = State.PLAY_GAME;
 				break;
 			case State.PLAY_GAME:
@@ -83,15 +78,15 @@ public class GameManager : Singleton<GameManager>
 				break;
 			case State.GAME_OVER:
 				gameOverUI.SetActive(true);
-				endTextUI.text = "Game Over. Game count: " + (gameCount + 1).ToString();
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
+				endTextUI.text = "You Win.";
+                //Cursor.lockState = CursorLockMode.None;
+                //Cursor.visible = true;
                 break;
 			case State.GAME_LOST:
                 gameOverUI.SetActive(true);
-				endTextUI.text = "You lost. Game count: " + (gameCount + 1).ToString();
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
+				endTextUI.text = "You Lost.";
+                //Cursor.lockState = CursorLockMode.None;
+                //Cursor.visible = true;
                 break;
 			default:
 				break;
@@ -105,9 +100,13 @@ public class GameManager : Singleton<GameManager>
 		state = State.START_GAME;
 	}
 
+	public void OnRestartGame()
+	{
+		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+	}
+
 	public void OnGameEnd()
 	{
-		gameCount++;
 		state = State.TITLE;
 	}
 

@@ -2,30 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Inventory : Item
+public class Inventory : MonoBehaviour
 {
-    public override ItemData GetData()
+
+    [SerializeField] Item[] items;
+    public Item currentItem { get; private set; }
+
+    void Start()
     {
-        throw new System.NotImplementedException();
+        currentItem = items[0];
+        currentItem.Equip();
     }
 
-    public override bool isReady()
+    public void Use()
     {
-        throw new System.NotImplementedException();
+        currentItem?.Use();
     }
 
-    public override void OnAnimEventItemUse()
+    public void StopUse()
     {
-        throw new System.NotImplementedException();
+        currentItem?.StopUse();
     }
 
-    public override void StopUse()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public override void Use()
-    {
-        throw new System.NotImplementedException();
-    }
 }
