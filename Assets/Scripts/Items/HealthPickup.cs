@@ -7,7 +7,7 @@ public class HealthPickup : MonoBehaviour
     [SerializeField] float health;
     [SerializeField] GameObject pickupPrefab;
 
-    private void OnTriggerEnter(Collider other)
+    public void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.TryGetComponent(out PlayerShip player))
         {
