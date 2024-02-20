@@ -12,6 +12,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Astroid Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 1543474052424428, guid: a38fcf519ec685b409c338ccd1b5ebf8, type: 3}
+      propertyPath: m_TagString
+      value: Astroid
+      objectReference: {fileID: 0}
     - target: {fileID: 4282251132955394, guid: a38fcf519ec685b409c338ccd1b5ebf8, type: 3}
       propertyPath: m_LocalPosition.x
       value: -12.97

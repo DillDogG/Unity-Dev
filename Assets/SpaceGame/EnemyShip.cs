@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyShip : Enemy
+public class EnemyShip : Enemy, IDamagable
 {
     [SerializeField] private Weapon weapon;
     [SerializeField] private float minFireRate;

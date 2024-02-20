@@ -9,7 +9,7 @@ public abstract class Ammo : Interactable
     public override void OnInteractStart(GameObject gameObject)
     {
         // apply damage if game object is damagable
-        if (!ammoData.damageOverTime && gameObject.TryGetComponent<IDamagable>(out IDamagable damagable))
+        if (!ammoData.damageOverTime && gameObject.TryGetComponent(out IDamagable damagable))
         {
             damagable.ApplyDamage(ammoData.damage);
         }

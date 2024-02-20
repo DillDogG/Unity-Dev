@@ -26,4 +26,4 @@ MonoBehaviour:
   fireRate: 0.5
   spread: {x: 0.1, y: 0.1, z: 0.1}
   rounds: 10
-  ammoPrefab: {fileID: 7851213077692213299, guid: 78ad9ad6269423446a589e0c1dbef99c, type: 3}
+  ammoPrefab: {fileID: 4868373121184074099, guid: 77702e8bd9224784796628f399982f5f, type: 3}
