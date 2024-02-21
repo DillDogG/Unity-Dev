@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class PlayerShip : MonoBehaviour, IDamagable
 {
-	[SerializeField] private IntEvent scoreEvent;
+	//[SerializeField] private IntEvent scoreEvent;
 	[SerializeField] private Inventory inventory;
-	[SerializeField] private IntVariable score;
+	//[SerializeField] private IntVariable score;
 	[SerializeField] private FloatVariable health;
 
 	[SerializeField] private GameObject hitPrefab;
@@ -16,7 +16,7 @@ public class PlayerShip : MonoBehaviour, IDamagable
 
     private void Start()
 	{
-		scoreEvent.Subscribe(AddPoints);
+		//scoreEvent.Subscribe(AddPoints);
 		health.value = 100;
 	}
 
@@ -24,21 +24,25 @@ public class PlayerShip : MonoBehaviour, IDamagable
 	{
 		if (Input.GetButtonDown("Jump"))
 		{
-			inventory.Use();
+			inventory.currentItem.Use();
 		}
 		if (Input.GetButtonUp("Jump"))
 		{
-			inventory.StopUse();
+			inventory.currentItem.StopUse();
 		}
+		if (Input.GetButtonDown("Fire2"))
+		{
+            inventory.SwapCurrent();
+        }
 
 		//pathFollower.speed (Input.GetKey(KeyCode.Space)) ? 2 : 1;
 	}
 
-	public void AddPoints(int points)
-	{
-		score.value += points;
-		Debug.Log(score.value);
-	}
+	//public void AddPoints(int points)
+	//{
+	//	score.value += points;
+	//	//Debug.Log(score.value);
+	//}
 
 	public void ApplyDamage(float damage)
 	{

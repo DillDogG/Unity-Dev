@@ -62,7 +62,7 @@ public class GameManager : Singleton<GameManager>
 				titleUI.SetActive(true);
                 Cursor.lockState = CursorLockMode.None;
 				Cursor.visible = true;
-                Timer = 60;
+                Timer = 15;
                 Lives = 3;
                 break;
 			case State.START_GAME:

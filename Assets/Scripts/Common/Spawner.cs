@@ -19,6 +19,7 @@ public abstract class Spawner : MonoBehaviour, IInteractable
 	[SerializeField] Event startEvent = null;
 	[SerializeField] Event stopEvent = null;
 
+
 	private List<GameObject> spawnedList = new List<GameObject>();
 	private bool active = false;
 	private Coroutine spawnTimerCoroutine;
@@ -48,7 +49,7 @@ public abstract class Spawner : MonoBehaviour, IInteractable
 			action.onStay += OnInteractActive;
 			action.onExit += OnInteractEnd;
 		}
-	}
+    }
 
 	IEnumerator SpawnTimer(float time)
 	{
@@ -97,8 +98,12 @@ public abstract class Spawner : MonoBehaviour, IInteractable
 			StopCoroutine(spawnTimerCoroutine);
 			spawnTimerCoroutine = null;
 		}
-		spawnTimerCoroutine = StartCoroutine(SpawnTimer(Random.Range(minSpawnTime, maxSpawnTime)));
-	}
+        if (SpawnReady())
+        {
+            Spawn();
+        }
+        //spawnTimerCoroutine = StartCoroutine(SpawnTimer(Random.Range(minSpawnTime, maxSpawnTime)));
+    }
 
 	void SetInactive() 
 	{
