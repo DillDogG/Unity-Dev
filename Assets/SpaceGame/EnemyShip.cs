@@ -14,10 +14,16 @@ public class EnemyShip : Enemy, IDamagable
         StartCoroutine(FireTimerCR());
     }
 
+    private void Update()
+    {
+        
+    }
+
     IEnumerator FireTimerCR()
     {
         float time = Random.Range(minFireRate, maxFireRate);
         yield return new WaitForSeconds(time);
         weapon.Use();
+        StartCoroutine(FireTimerCR());
     }
 }

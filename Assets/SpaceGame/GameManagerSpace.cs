@@ -11,10 +11,12 @@ public class GameManagerSpace : Singleton<GameManager>
 	[SerializeField] GameObject gameOverUI;
 	[SerializeField] TMP_Text endTextUI;
 	[SerializeField] TMP_Text livesUI;
+	[SerializeField] TMP_Text scoreUI;
 	//[SerializeField] TMP_Text timerUI;
 	[SerializeField] Slider healthUI;
 
 	[SerializeField] FloatVariable health;
+	[SerializeField] IntVariable score;
 	[SerializeField] FloatVariable speed;
 	//[SerializeField] GameObject respawn;
 
@@ -44,6 +46,16 @@ public class GameManagerSpace : Singleton<GameManager>
 			} 
 		}
 
+	public int Score
+	{
+		get { return score; }
+		set
+		{
+            score.value = value;
+            scoreUI.text = score.value.ToString();
+        }
+	}
+
 	public float Timer { get; private set; }
 
     void Update()
@@ -57,6 +69,7 @@ public class GameManagerSpace : Singleton<GameManager>
 				Cursor.visible = true;
                 Timer = 60;
 				speed.value = 0;
+				score.value = 0;
                 Lives = 3;
                 break;
 			case State.START_GAME:
@@ -119,6 +132,6 @@ public class GameManagerSpace : Singleton<GameManager>
 
 	public void OnAddPoints(int points)
 	{
-		print(points);
+		Score += points;
 	}
 }
